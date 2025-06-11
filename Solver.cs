@@ -5,12 +5,12 @@ using System.Reflection.Metadata.Ecma335;
 
 internal class Solver
 {
-    int expected_solutions = 0; 
+    int expected_nodes_in_solution = 0; 
 
     internal List<Set> Solutions = new List<Set>();
-    public void Solve(List<Wire> wires)
+    public void Solve(List<Wire> wires, bool extensive= false)
     {
-        this.expected_solutions = wires.Count;
+        this.expected_nodes_in_solution = wires.Count;
 
         foreach (var w in wires)
         { 
@@ -18,20 +18,21 @@ internal class Solver
             wire1.isNode1Connected = true;
             var consumed1 = new Set() { wire1 };
             var available1 = new Set(); available1.CloneAndRemove(wires, wire1);
-            Sink(consumed1, available1);
+            Sink(consumed1, available1, extensive);
 
             var wire2 = w.Clone();
             wire2.isNode2Connected = true;
             var consumed2 = new Set() { wire2 };
             var available2 = new Set(); available2.CloneAndRemove(wires, wire2);
-            Sink(consumed2, available2);
+            
+            Sink(consumed2, available2, extensive);
         }
     }
 
-    public bool Sink(Set consumed, Set available)
+    public bool Sink(Set consumed, Set available, bool extensive)
     {
         // Check if all wires are consumed
-        if (consumed.Count == this.expected_solutions && available.Count == 0)
+        if (consumed.Count == this.expected_nodes_in_solution && available.Count == 0)
         {
             this.Solutions.Add(consumed);
             // All wires are consumed, we can return or process the route
@@ -58,7 +59,9 @@ internal class Solver
                 var available2 = new Set(); 
                 available2.CloneAndRemove(available, wire2);
 
-                return Sink(consumed4, available2);
+                bool found = Sink(consumed4, available2, extensive);
+
+                if (found && !extensive) return found;
             }
         }
 
@@ -69,12 +72,14 @@ internal class Solver
     {
         Console.WriteLine($"Solutions found: {this.Solutions.Count}");
 
+        int counter = 0;
+
         foreach (var s in this.Solutions)
         {
-            Console.WriteLine("Solution:");
+            Console.WriteLine("Solution" + (++counter).ToString() + ":");
             foreach (var w in s)
             {
-                Console.WriteLine(w);
+                Console.Write(w + " / " );
             }
             Console.WriteLine();
         }

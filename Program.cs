@@ -18,11 +18,11 @@ var wires = new Set()
 };
 
 var solver = new Solver();
-// solver.Solve(wires);
+solver.Solve(wires);
 solver.PrintSolutions();
 
 // complex diagram with 16 wires, each vertex 4 connections
-Set wires2 = new Set();
+var wires2 = new Set();
 var temps = new[] {
     new string[] { "2", "3", "5", "7", }, // 1
     new string[] { "1", "4", "8", "6", }, // 2
@@ -57,3 +57,60 @@ foreach (var t in temps)
 var solver2 = new Solver();
 solver2.Solve(wires2);
 solver2.PrintSolutions();
+
+// complex diagram with 16 wires, each vertex 4 connections
+Set wires3 = new Set();
+var temps3 = new[] {
+    new string[] { "2", "3"  }, // 1
+    new string[] { "1", "3", "4", "6", }, // 2
+    new string[] { "1", "2", "7", "5", }, // 3
+    new string[] { "2", "6"  }, // 4 
+    new string[] { "3", "7"  }, // 5
+    new string[] { "4", "2", "7", "8", }, // 6
+    new string[] { "6", "8", "3", "5", }, // 7
+    new string[] { "6", "7"  }, // 8
+};
+
+int counter3 = 0;
+foreach (var t in temps3)
+{
+    counter3++;
+    string n = counter3.ToString();
+
+    foreach (var v in t)
+    {
+        wires3.AddUnique(new Wire(n, v));
+    }
+}
+
+var solver3 = new Solver();
+solver3.Solve(wires3, true);
+solver3.PrintSolutions();
+
+
+// Konigsberg bridge
+var wires_konigs = new Set();
+var temps_konigs = new[] {
+    new string[] { "2", "4", "5"  }, // 1
+    new string[] { "3", "4", "1", }, // 2
+    new string[] { "2", "4", "6" }, // 3
+    new string[] { "6", "2", "1", "1", "5",  }, // 4 
+    new string[] { "1", "4"  }, // 5
+    new string[] { "4", "3",}, // 6
+};
+
+int counter_konigs = 0;
+foreach (var t in temps_konigs)
+{
+    counter_konigs++;
+    string n = counter_konigs.ToString();
+
+    foreach (var v in t)
+    {
+        wires_konigs.AddUnique(new Wire(n, v));
+    }
+}
+
+var solver_konigs = new Solver();
+solver_konigs.Solve(wires_konigs, true);
+solver_konigs.PrintSolutions();
