@@ -5,9 +5,13 @@ using System.Reflection.Metadata.Ecma335;
 
 internal class Solver
 {
+    int expected_solutions = 0; 
+
     internal List<Set> Solutions = new List<Set>();
     public void Solve(List<Wire> wires)
     {
+        this.expected_solutions = wires.Count;
+
         foreach (var w in wires)
         { 
             var wire1 = w.Clone();
@@ -27,7 +31,7 @@ internal class Solver
     public bool Sink(Set consumed, Set available)
     {
         // Check if all wires are consumed
-        if (consumed.Count == 6 && available.Count == 0)
+        if (consumed.Count == this.expected_solutions && available.Count == 0)
         {
             this.Solutions.Add(consumed);
             // All wires are consumed, we can return or process the route
@@ -59,5 +63,21 @@ internal class Solver
         }
 
         return false;
+    }
+
+    internal void PrintSolutions()
+    {
+        Console.WriteLine($"Solutions found: {this.Solutions.Count}");
+
+        foreach (var s in this.Solutions)
+        {
+            Console.WriteLine("Solution:");
+            foreach (var w in s)
+            {
+                Console.WriteLine(w);
+            }
+            Console.WriteLine();
+        }
+
     }
 }
