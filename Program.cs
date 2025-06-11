@@ -7,16 +7,14 @@ Console.WriteLine("Hello, World!");
 
 // mercedes! 
 
-var wab = new Wire { Node1 = "A", Node2 = "B", isNode1Connected = false, isNode2Connected = false };
-var wbc = new Wire { Node1 = "B", Node2 = "C", isNode1Connected = false, isNode2Connected = false };
-var wca = new Wire { Node1 = "C", Node2 = "A", isNode1Connected = false, isNode2Connected = false };
-var woa = new Wire { Node1 = "A", Node2 = "O", isNode1Connected = false, isNode2Connected = false };
-var wob = new Wire { Node1 = "B", Node2 = "O", isNode1Connected = false, isNode2Connected = false };
-var woc = new Wire { Node1 = "C", Node2 = "O", isNode1Connected = false, isNode2Connected = false };
-
-var wires = new List<Wire>
+var wires = new Set() 
 {
-    wab, wbc, wca, woa, wob, woc
+    new Wire("A", "B"),
+    new Wire("B", "C"),
+    new Wire("C", "A"),
+    new Wire("O", "A"),
+    new Wire("O", "B"),
+    new Wire("O", "C"),
 };
 
 var solver = new Solver();
@@ -24,7 +22,7 @@ var solver = new Solver();
 solver.PrintSolutions();
 
 // complex diagram with 16 wires, each vertex 4 connections
-var wires2 = new List<Wire>();
+Set wires2 = new Set();
 var temps = new[] {
     new string[] { "2", "3", "5", "7", }, // 1
     new string[] { "1", "4", "8", "6", }, // 2
@@ -52,7 +50,7 @@ foreach (var t in temps)
 
     foreach (var v in t)
     {
-        wires2.Add(new Wire() { isNode1Connected = false, isNode2Connected = false, Node1 = n, Node2 = v});
+        wires2.AddUnique(new Wire( n , v ) );
     }
 }
 

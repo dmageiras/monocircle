@@ -8,13 +8,28 @@ namespace monocircle
 {
     internal class Wire
     {
-        public required string Node1;
+        public Wire(string node1, string node2)
+        {
+            if (node1 == null || node2 == null) throw new Exception("Node cannot be null");
 
-        public required string Node2;
+            // ensures wire AB has the same signature as BA
+            if (node1.CompareTo(node2) > 0)
+            {
+                this.Node1 = node2;
+                this.Node2 = node1;
+            }
+            else
+            {
+                this.Node1 = node1;
+                this.Node2 = node2;
+            }
+        }
 
-        public required bool isNode1Connected = false;
+        private string Node1, Node2;
 
-        public required bool isNode2Connected = false;
+        public bool isNode1Connected = false;
+
+        public bool isNode2Connected = false;
 
         public string Signature { get { return Node1 + Node2; } } // all clones have the same signature whether connected or not
 
@@ -25,7 +40,11 @@ namespace monocircle
 
         internal Wire Clone()
         {
-            return new Wire() { isNode1Connected = this.isNode1Connected, isNode2Connected = this.isNode2Connected, Node1 = this.Node1, Node2 = this.Node2 };
+            return new Wire(Node1, Node2)
+            {
+                isNode1Connected = this.isNode1Connected,
+                isNode2Connected = this.isNode2Connected
+            };
         }
 
         internal bool CanConnectTo(Wire wire)
@@ -70,5 +89,6 @@ namespace monocircle
 
             return false;
         }
+
     }
 }

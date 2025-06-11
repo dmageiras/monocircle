@@ -31,5 +31,15 @@ namespace monocircle
                 }
             }
         }
+        internal bool AddUnique(Wire wire)
+        {
+            var s = wire.Signature; // ensure signature is set
+            foreach (var w in this)
+            {
+                if (w.Signature == s) return false; // already exists
+            }
+            this.Add(wire);
+            return true; // added successfully
+        }
     }
 }
